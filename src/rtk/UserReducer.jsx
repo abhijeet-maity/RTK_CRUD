@@ -12,11 +12,29 @@ const userSlice = createSlice({
   initialState,
   reducers : {
     addUser : (state, action) => {
-        // console.log(action);
-        state.push(action.payload)
+      // console.log(action);
+      state.push(action.payload)
+    },
+    updateUser : (state, action) => {
+      const {id, name, age, technology} = action.payload;
+      const userToUpdate = state.find(user => user.id == id);
+      if(userToUpdate) {
+        userToUpdate.name = name;
+        userToUpdate.age = age;
+        userToUpdate.technology = technology;
+      }
+    },
+    deleteUser : (state, action) => {
+      const {id} = action.payload;
+      const userToDelete = state.filter((user) => {
+        return user.id == id;
+      })
+      if(userToDelete) {
+        return state.filter(f => f.id !== id);
+      }
     }
   }
 }); 
 
-export const {addUser} = userSlice.actions;
+export const {addUser, updateUser, deleteUser} = userSlice.actions;
 export default userSlice.reducer;
