@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser} from "../rtk/UserReducer";
 
 const Update = () => {
   const { id } = useParams();
@@ -18,19 +19,34 @@ const Update = () => {
     age,
     technology,
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handlaChange(e) {
     const { name, value } = e.target;
-    setUserDetails((prev) => {
+    setUserToEdit((prev) => {
       return { ...prev, [name]: value };
     });
   }
-  
+
+  function handleUpdate(e) {
+    e.preventDefault();
+    dispatch(
+      updateUser({
+        id: id,
+        name: userToEdit.name,
+        age: userToEdit.age,
+        technology: userToEdit.technology,
+      })
+    );
+    navigate("/");
+  }
+
   return (
     <div className="d-flex w-100 vh-100 justify-content-center align-items-center">
       <div className="w-50 border bg-secondary text-white p-5">
         <h3>Update user</h3>
-        <form action="">
+        <form action="" onSubmit={handleUpdate}>
           <div>
             <label htmlFor="name">Name: </label>
             <input
